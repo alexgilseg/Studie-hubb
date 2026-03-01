@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Föräldrapanel</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+
+<!-- LOGIN -->
+<div id="view-login">
+  <div class="login-card">
+    <div style="font-size:2rem">🔐</div>
+    <h1>Föräldrapanel</h1>
+    <p class="muted">Ange lösenordet för att fortsätta</p>
+    <input class="input-field" id="login-password" type="password" placeholder="Lösenord" autofocus>
+    <div class="error-msg hidden" id="login-error">Fel lösenord</div>
+    <button class="btn btn-primary full-width" id="btn-login">Logga in</button>
+    <a href="index.html" class="back-link">← Tillbaka till startsidan</a>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="view-admin" class="hidden">
+
+  <header class="admin-header">
+    <div class="header-inner">
+      <a href="index.html" class="admin-logo">🎓 Studie-hubb</a>
+      <nav class="admin-nav">
+        <button class="nav-tab active" data-tab="exercises">Övningar</button>
+        <button class="nav-tab" data-tab="exams">Prov</button>
+        <button class="nav-tab" data-tab="profiles">Profiler</button>
+        <button class="nav-tab" data-tab="settings">Inställningar</button>
+      </nav>
+      <button class="header-btn" id="btn-logout" style="color:var(--muted);border-color:var(--border)">Logga ut</button>
+    </div>
+  </header>
+
+  <!-- ÖVNINGAR TAB -->
+  <div id="tab-exercises" class="admin-panel">
+    <div class="panel-header">
+      <h2>Övningar</h2>
+      <button class="btn btn-primary" id="btn-new-exercise">+ Ny övning</button>
+    </div>
+    <div class="admin-filters">
+      <select class="input-field select-sm" id="filter-subject">
+        <option value="">Alla ämnen</option>
+      </select>
+      <select class="input-field select-sm" id="filter-profile">
+        <option value="">Alla profiler</option>
+      </select>
+      <input class="input-field" id="filter-search" type="text" placeholder="Sök övning..." style="max-width:220px">
+    </div>
+    <div class="admin-exercise-list" id="admin-exercise-list"></div>
+  </div>
+
+  <!-- PROV TAB -->
+  <div id="tab-exams" class="admin-panel hidden">
+    <div class="panel-header">
+      <h2>Prov</h2>
+      <button class="btn btn-primary" id="btn-new-exam">+ Nytt prov</button>
+    </div>
+    <div class="admin-filters">
+      <select class="input-field select-sm" id="exam-filter-profile">
+        <option value="">Alla profiler</option>
+      </select>
+    </div>
+    <div class="exam-list" id="admin-exam-list"></div>
+  </div>
+
+  <!-- PROFILER TAB -->
+  <div id="tab-profiles" class="admin-panel hidden">
+    <div class="panel-header">
+      <h2>Profiler</h2>
+      <button class="btn btn-primary" id="btn-new-profile">+ Ny profil</button>
+    </div>
+    <div class="profile-manage-list" id="profile-manage-list"></div>
+
+    <!-- Leaderboard -->
+    <div style="margin-top:32px">
+      <div class="section-title">Leaderboard</div>
+      <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+
+  <!-- INSTÄLLNINGAR TAB -->
+  <div id="tab-settings" class="admin-panel hidden">
+    <h2 style="margin-bottom:24px">Inställningar</h2>
+    <div class="settings-card">
+      <h3>Byt lösenord</h3>
+      <input class="input-field" id="current-password" type="password" placeholder="Nuvarande lösenord">
+      <input class="input-field" id="new-password" type="password" placeholder="Nytt lösenord">
+      <input class="input-field" id="confirm-password" type="password" placeholder="Bekräfta nytt lösenord">
+      <div class="error-msg hidden" id="password-error"></div>
+      <button class="btn btn-primary" id="btn-change-password">Spara nytt lösenord</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- EXERCISE EDITOR MODAL -->
+<div class="overlay hidden" id="exercise-overlay">
+  <div class="editor-modal">
+    <div class="editor-header">
+      <h2 id="editor-title">Ny övning</h2>
+      <button class="close-btn" id="close-editor">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Titel</label>
+          <input class="input-field" id="ex-title" type="text" placeholder="T.ex. Multiplikation 1–5">
+        </div>
+        <div class="field-group">
+          <label>Ämne</label>
+          <select class="input-field" id="ex-subject"></select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Beskrivning</label>
+        <input class="input-field" id="ex-description" type="text" placeholder="Kort beskrivning (valfri)">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Svårighet (1–5)</label>
+          <select class="input-field" id="ex-difficulty">
+            <option value="1">1 — Lätt</option>
+            <option value="2">2 — Ganska lätt</option>
+            <option value="3" selected>3 — Medel</option>
+            <option value="4">4 — Svår</option>
+            <option value="5">5 — Mycket svår</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Åldersintervall</label>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input class="input-field" id="ex-age-min" type="number" min="5" max="16" value="7" style="width:70px">
+            <span style="color:var(--muted)">–</span>
+            <input class="input-field" id="ex-age-max" type="number" min="5" max="16" value="12" style="width:70px">
+            <span style="color:var(--muted);font-size:0.88rem">år</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Frågor -->
+      <div class="questions-section">
+        <div class="questions-header">
+          <h3>Frågor</h3>
+          <div class="add-question-btns">
+            <button class="btn btn-sm btn-ghost" id="add-mc-btn">+ Flerval</button>
+            <button class="btn btn-sm btn-ghost" id="add-text-btn">+ Fritext</button>
+          </div>
+        </div>
+        <div class="questions-list" id="questions-list"></div>
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn btn-ghost" id="cancel-editor">Avbryt</button>
+      <button class="btn btn-primary" id="save-editor">Spara övning</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXAM EDITOR MODAL -->
+<div class="overlay hidden" id="exam-overlay">
+  <div class="editor-modal" style="max-width:580px">
+    <div class="editor-header">
+      <h2 id="exam-editor-title">Nytt prov</h2>
+      <button class="close-btn" id="close-exam-editor">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="field-group">
+        <label>Provnamn</label>
+        <input class="input-field" id="exam-name" type="text" placeholder="T.ex. Matteprovet v.12">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>Profil</label>
+          <select class="input-field" id="exam-profile"></select>
+        </div>
+        <div class="field-group">
+          <label>Ämne</label>
+          <select class="input-field" id="exam-subject"></select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Datum för provet</label>
+        <input class="input-field" id="exam-date" type="date">
+      </div>
+      <div class="field-group">
+        <label>Kopplade övningar</label>
+        <p class="muted" style="margin-bottom:8px;font-size:0.82rem">Välj övningar som är relevanta för detta prov</p>
+        <div id="exam-exercise-picker" style="display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn btn-ghost" id="cancel-exam-editor">Avbryt</button>
+      <button class="btn btn-primary" id="save-exam-editor">Spara prov</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE EDITOR MODAL -->
+<div class="overlay hidden" id="profile-overlay">
+  <div class="editor-modal" style="max-width:440px">
+    <div class="editor-header">
+      <h2 id="profile-editor-title">Ny profil</h2>
+      <button class="close-btn" id="close-profile-editor">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="field-group">
+        <label>Namn</label>
+        <input class="input-field" id="profile-name" type="text" placeholder="T.ex. Juno">
+      </div>
+      <div class="field-group">
+        <label>Födelsedatum</label>
+        <input class="input-field" id="profile-birthdate" type="date">
+      </div>
+      <div class="field-group">
+        <label>Avatar</label>
+        <div id="admin-avatar-picker" style="display:flex;gap:10px;flex-wrap:wrap;padding-top:4px"></div>
+        <input type="hidden" id="profile-avatar" value="1">
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn btn-ghost" id="cancel-profile-editor">Avbryt</button>
+      <button class="btn btn-primary" id="save-profile-editor">Spara</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

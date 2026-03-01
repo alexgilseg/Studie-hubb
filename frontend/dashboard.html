@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="dashboard-header" class="dashboard-header">
+  <div class="dashboard-header-inner">
+    <div class="dashboard-profile">
+      <div class="dashboard-avatar" id="header-avatar"></div>
+      <div>
+        <div class="dashboard-name" id="header-name">...</div>
+        <div class="dashboard-meta" id="header-meta">Nivå 1 · 0 XP</div>
+      </div>
+    </div>
+    <div class="level-bar-wrap" id="level-bar-wrap">
+      <div class="level-label">
+        <span id="level-label-current">Nivå 1</span>
+        <span id="level-label-next">150 XP till nästa</span>
+      </div>
+      <div class="level-bar-bg">
+        <div class="level-bar-fill" id="level-bar-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="streak-badge">
+      <div class="streak-icon">🔥</div>
+      <div class="streak-number" id="streak-number">0</div>
+      <div class="streak-label">dagar streak</div>
+    </div>
+    <div class="header-actions">
+      <a href="index.html" class="header-btn">← Byt profil</a>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <!-- Vänster kolumn -->
+  <div>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-value" id="stat-xp">0</div>
+        <div class="stat-label">Total XP</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value" id="stat-sessions">0</div>
+        <div class="stat-label">Övningar gjorda</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏅</div>
+        <div class="stat-value" id="stat-badges">0</div>
+        <div class="stat-label">Badges upplåsta</div>
+      </div>
+    </div>
+
+    <div class="section-title">Ämnen</div>
+    <div class="subject-grid" id="subject-grid"></div>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+      <div class="section-title" style="margin-bottom:0">Senaste övningar</div>
+      <a href="history.html" id="history-link" class="btn btn-sm btn-ghost">Visa all historik</a>
+    </div>
+    <div id="recent-sessions" class="sessions-list"></div>
+  </div>
+
+  <!-- Höger sidopanel -->
+  <div class="dashboard-sidebar">
+
+    <!-- Kommande prov -->
+    <div class="sidebar-card">
+      <h3>Kommande prov</h3>
+      <div id="upcoming-exams"></div>
+      <a href="exam-prep.html" id="exam-link" class="btn btn-sm btn-outline full-width" style="margin-top:8px">Se alla prov</a>
+    </div>
+
+    <!-- Senaste badges -->
+    <div class="sidebar-card">
+      <h3>Senaste badges</h3>
+      <div id="recent-badges"></div>
+      <a href="history.html#badges" id="badges-link" class="btn btn-sm btn-ghost full-width" style="margin-top:8px">Se alla badges</a>
+    </div>
+
+    <!-- Snabbval: alla övningar -->
+    <a href="exercises.html" id="exercises-link" class="btn btn-primary btn-lg full-width" style="text-align:center; justify-content:center">
+      Öva nu! →
+    </a>
+
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

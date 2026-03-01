@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Välj övning</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <h1>📚 Välj övning</h1>
+    <div class="header-actions">
+      <a href="dashboard.html" id="back-to-dash" class="header-btn">← Dashboard</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <div class="filter-bar">
+    <div class="chips" id="subject-chips">
+      <button class="chip active" data-subject="">Alla ämnen</button>
+    </div>
+    <div style="margin-left:auto; display:flex; gap:8px; align-items:center">
+      <label style="font-size:0.85rem;font-weight:600;color:var(--muted)">Svårighet</label>
+      <select class="input-field select-sm" id="difficulty-filter">
+        <option value="">Alla</option>
+        <option value="1">⭐ Lätt</option>
+        <option value="2">⭐⭐ Medel</option>
+        <option value="3">⭐⭐⭐ Svår</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="exercises-grid" id="exercises-grid">
+    <div class="empty-state" id="loading-state">
+      <span class="empty-icon">⏳</span>
+      <p>Laddar övningar...</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/exercises.js"></script>
+</body>
+</html>

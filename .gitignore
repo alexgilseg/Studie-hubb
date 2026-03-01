@@ -1,0 +1,4 @@
+backend/node_modules/
+backend/db/studie-hubb.db
+*.db-shm
+*.db-wal

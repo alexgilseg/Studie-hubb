@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Övning</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- EXERCISE VIEW -->
+<div id="view-exercise">
+  <div class="exercise-header">
+    <button class="back-btn" id="btn-back">← Tillbaka</button>
+    <h2 id="exercise-title">Laddar...</h2>
+    <span class="progress-text" id="progress-text">0 / 0</span>
+  </div>
+  <div class="exercise-body">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+    <div class="question-card" id="question-card">
+      <div class="question-text" id="question-text"></div>
+      <div id="question-input"></div>
+      <div class="feedback hidden" id="feedback"></div>
+      <button class="btn btn-primary btn-next hidden" id="btn-next">Nästa →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT VIEW -->
+<div id="view-result" class="hidden">
+  <div class="result-card">
+    <div class="result-icon" id="result-icon">🏆</div>
+    <h2 id="result-heading">Perfekt!</h2>
+    <div class="result-score" id="result-score">0 av 0</div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-xp-earned" id="result-xp">+0 XP</div>
+    <div class="result-new-badges hidden" id="result-new-badges">
+      <h4>🎉 Ny badge upplåst!</h4>
+      <div id="new-badges-list"></div>
+    </div>
+    <div class="result-btns">
+      <button class="btn btn-outline" id="btn-retry">Försök igen</button>
+      <button class="btn btn-primary" id="btn-home">Fler övningar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/exercise.js"></script>
+</body>
+</html>
