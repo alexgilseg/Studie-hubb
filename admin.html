@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adminpanel – Studiehubb</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="admin-body">
+
+<div id="admin-app">
+
+  <!-- ===== LOGIN ===== -->
+  <div id="login-view">
+    <div class="login-card">
+      <h1>&#128274; Adminpanel</h1>
+      <p class="muted">Ange lösenordet för att fortsätta</p>
+      <input type="password" id="pw-input" class="input-field" placeholder="Lösenord" />
+      <button id="login-btn" class="btn btn-primary full-width">Logga in</button>
+      <p id="login-error" class="error-msg hidden">Fel lösenord. Försök igen.</p>
+      <a href="index.html" class="back-link">&#8592; Tillbaka till studiesidan</a>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div id="dashboard-view" class="hidden">
+    <header class="admin-header">
+      <div class="header-inner">
+        <a href="index.html" class="admin-logo">&#128218; Studiehubb</a>
+        <nav class="admin-nav">
+          <button id="tab-exercises" class="nav-tab active">&#128218; Övningar</button>
+          <button id="tab-settings"  class="nav-tab">&#9881; Inställningar</button>
+        </nav>
+        <button id="logout-btn" class="btn btn-outline btn-sm">Logga ut</button>
+      </div>
+    </header>
+
+    <!-- EXERCISES TAB -->
+    <div id="tab-exercises-panel" class="admin-panel">
+      <div class="panel-header">
+        <h2>Övningar</h2>
+        <button id="new-exercise-btn" class="btn btn-primary">+ Ny övning</button>
+      </div>
+
+      <!-- Filter -->
+      <div class="admin-filters">
+        <select id="filter-subject" class="input-field select-sm">
+          <option value="all">Alla ämnen</option>
+          <option value="matematik">Matematik</option>
+          <option value="svenska">Svenska</option>
+          <option value="engelska">Engelska</option>
+          <option value="no">NO</option>
+          <option value="so">SO</option>
+          <option value="teknik">Teknik</option>
+        </select>
+        <select id="filter-age" class="input-field select-sm">
+          <option value="all">Alla åldrar</option>
+          <option value="8">8 år</option>
+          <option value="9">9 år</option>
+          <option value="10">10 år</option>
+        </select>
+      </div>
+
+      <!-- Exercise list -->
+      <div id="admin-exercise-list" class="admin-exercise-list"></div>
+      <div id="admin-no-exercises" class="empty-state hidden">
+        <span class="empty-icon">&#128214;</span>
+        <p>Inga övningar ännu.</p>
+        <p class="muted">Klicka på "+ Ny övning" för att skapa din första!</p>
+      </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings-panel" class="admin-panel hidden">
+      <h2>Inställningar</h2>
+      <div class="settings-card">
+        <h3>Byt lösenord</h3>
+        <input type="password" id="new-pw1" class="input-field" placeholder="Nytt lösenord" />
+        <input type="password" id="new-pw2" class="input-field" placeholder="Bekräfta lösenord" />
+        <button id="change-pw-btn" class="btn btn-primary">Spara lösenord</button>
+        <p id="pw-change-msg" class="hidden"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EXERCISE EDITOR (modal) ===== -->
+  <div id="editor-overlay" class="overlay hidden">
+    <div class="editor-modal">
+      <div class="editor-header">
+        <h2 id="editor-title">Ny övning</h2>
+        <button id="close-editor" class="close-btn">&#10005;</button>
+      </div>
+
+      <div class="editor-body">
+        <!-- Meta -->
+        <div class="field-group">
+          <label>Titel *</label>
+          <input type="text" id="ex-title" class="input-field" placeholder="T.ex. Multiplikation 1–10" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group">
+            <label>Ämne *</label>
+            <select id="ex-subject" class="input-field">
+              <option value="">Välj ämne</option>
+              <option value="matematik">&#128290; Matematik</option>
+              <option value="svenska">&#128221; Svenska</option>
+              <option value="engelska">&#127468;&#127463; Engelska</option>
+              <option value="no">&#128300; NO</option>
+              <option value="so">&#127758; SO</option>
+              <option value="teknik">&#9881; Teknik</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label>Åldersgrupp *</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="age" value="8" /> 8 år</label>
+              <label><input type="checkbox" name="age" value="9" /> 9 år</label>
+              <label><input type="checkbox" name="age" value="10" /> 10 år</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Beskrivning</label>
+          <textarea id="ex-description" class="input-field textarea" rows="2" placeholder="Kort beskrivning av övningen..."></textarea>
+        </div>
+
+        <!-- Questions -->
+        <div class="questions-section">
+          <div class="questions-header">
+            <h3>Frågor</h3>
+            <div class="add-question-btns">
+              <button id="add-mc-btn"   class="btn btn-outline btn-sm">+ Flervalsfråga</button>
+              <button id="add-text-btn" class="btn btn-outline btn-sm">+ Fritextfråga</button>
+            </div>
+          </div>
+          <div id="questions-list" class="questions-list">
+            <p id="no-questions-msg" class="muted center">Lägg till minst en fråga.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-footer">
+        <button id="cancel-editor-btn" class="btn btn-outline">Avbryt</button>
+        <button id="save-exercise-btn" class="btn btn-primary">Spara övning</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #admin-app -->
+
+<script src="js/storage.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

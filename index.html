@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studiehubb</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== START VIEW ===== -->
+  <div id="start-view">
+    <header class="main-header">
+      <div class="header-inner">
+        <h1>&#128218; Studiehubb</h1>
+        <a href="admin.html" class="admin-link">&#128274; Adminpanel</a>
+      </div>
+    </header>
+
+    <main class="home-main">
+      <!-- Age filter -->
+      <section class="filter-section">
+        <h2>Vem ska öva?</h2>
+        <div class="age-chips" id="age-chips">
+          <button class="chip chip-age active" data-age="all">Alla åldrar</button>
+          <button class="chip chip-age" data-age="8">8 år</button>
+          <button class="chip chip-age" data-age="9">9 år</button>
+          <button class="chip chip-age" data-age="10">10 år</button>
+        </div>
+      </section>
+
+      <!-- Subject filter -->
+      <section class="filter-section">
+        <h2>Välj ämne</h2>
+        <div class="subject-chips" id="subject-chips">
+          <button class="chip chip-subject active" data-subject="all">Alla ämnen</button>
+          <button class="chip chip-subject" data-subject="matematik" style="--accent: var(--c-matematik)">&#128290; Matematik</button>
+          <button class="chip chip-subject" data-subject="svenska"   style="--accent: var(--c-svenska)">&#128221; Svenska</button>
+          <button class="chip chip-subject" data-subject="engelska"  style="--accent: var(--c-engelska)">&#127468;&#127463; Engelska</button>
+          <button class="chip chip-subject" data-subject="no"        style="--accent: var(--c-no)">&#128300; NO</button>
+          <button class="chip chip-subject" data-subject="so"        style="--accent: var(--c-so)">&#127758; SO</button>
+          <button class="chip chip-subject" data-subject="teknik"    style="--accent: var(--c-teknik)">&#9881; Teknik</button>
+        </div>
+      </section>
+
+      <!-- Exercises grid -->
+      <section>
+        <div id="exercises-grid" class="exercises-grid"></div>
+        <div id="no-exercises" class="empty-state hidden">
+          <span class="empty-icon">&#128214;</span>
+          <p>Inga övningar hittades.</p>
+          <p class="muted">Be en vuxen lägga till övningar i adminpanelen!</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== EXERCISE VIEW ===== -->
+  <div id="exercise-view" class="hidden">
+    <header class="exercise-header">
+      <button id="back-btn" class="back-btn">&#8592; Tillbaka</button>
+      <h2 id="exercise-title">Övning</h2>
+      <div id="progress-text" class="progress-text">Fråga 1 av 5</div>
+    </header>
+
+    <div class="exercise-body">
+      <!-- Progress bar -->
+      <div class="progress-bar-wrap">
+        <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+      </div>
+
+      <!-- Question card -->
+      <div id="question-card" class="question-card">
+        <p id="question-text" class="question-text"></p>
+
+        <!-- Multiple choice options -->
+        <div id="mc-options" class="mc-options"></div>
+
+        <!-- Text input -->
+        <div id="text-input-wrap" class="hidden">
+          <input type="text" id="text-answer" class="text-answer" placeholder="Skriv ditt svar här..." autocomplete="off" />
+          <button id="submit-text" class="btn btn-primary">Svara</button>
+        </div>
+
+        <!-- Feedback -->
+        <div id="feedback" class="feedback hidden"></div>
+
+        <!-- Next button -->
+        <button id="next-btn" class="btn btn-primary btn-next hidden">Nästa fråga &#8594;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULT VIEW ===== -->
+  <div id="result-view" class="hidden">
+    <div class="result-card">
+      <div id="result-icon" class="result-icon"></div>
+      <h2 id="result-title">Bra jobbat!</h2>
+      <p id="result-score" class="result-score"></p>
+      <p id="result-msg" class="result-msg"></p>
+      <div class="result-btns">
+        <button id="retry-btn" class="btn btn-outline">&#128257; Försök igen</button>
+        <button id="home-btn"  class="btn btn-primary">&#127968; Hem</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script src="js/storage.js"></script>
+<script src="js/sample-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
