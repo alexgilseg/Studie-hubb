@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db/database');
 const { calculateXP, updateStreak, checkBadges } = require('./gamification');
+const { updateSpacedRepetition } = require('./spaced-repetition');
 
 // POST /api/sessions  — spara ett genomfört pass
 router.post('/', (req, res) => {
@@ -48,6 +49,11 @@ router.post('/', (req, res) => {
         last_active_date = date('now')
     WHERE profile_id = ?
   `).run(xp, calculateLevel(stats.xp_total + xp), streakResult.streak, streakResult.streak, profile_id);
+
+  // Uppdatera spaced repetition för alla svar
+  if (answers.length > 0) {
+    try { updateSpacedRepetition(profile_id, answers); } catch (_) {}
+  }
 
   // Kolla och dela ut badges
   const newBadges = checkBadges(profile_id);

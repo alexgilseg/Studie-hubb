@@ -2,6 +2,93 @@
    Studie-hubb — Övningsspelaren
    ================================================ */
 
+/* ---------- Ljud via Web Audio API ---------- */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new AudioCtx();
+  return _audioCtx;
+}
+
+function playTone(freq, duration, type = 'sine', gainVal = 0.18) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + duration);
+  } catch (_) {}
+}
+
+function soundCorrect() {
+  playTone(523, 0.12); // C5
+  setTimeout(() => playTone(659, 0.12), 100); // E5
+  setTimeout(() => playTone(784, 0.22), 200); // G5
+}
+
+function soundWrong() {
+  playTone(300, 0.1, 'sawtooth', 0.12);
+  setTimeout(() => playTone(220, 0.25, 'sawtooth', 0.1), 110);
+}
+
+function soundLevelUp() {
+  [523, 587, 659, 698, 784].forEach((f, i) =>
+    setTimeout(() => playTone(f, 0.18), i * 90)
+  );
+}
+
+function soundBadge() {
+  [784, 880, 988, 1047].forEach((f, i) =>
+    setTimeout(() => playTone(f, 0.2, 'sine', 0.15), i * 80)
+  );
+}
+
+/* ---------- Konfetti ---------- */
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const pieces = Array.from({ length: 120 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height - canvas.height,
+    r: 6 + Math.random() * 8,
+    d: 2 + Math.random() * 3,
+    color: `hsl(${Math.random() * 360},90%,60%)`,
+    tilt: Math.random() * 10 - 5,
+    tiltAngle: 0,
+    tiltSpeed: 0.05 + Math.random() * 0.1
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of pieces) {
+      ctx.beginPath();
+      ctx.fillStyle = p.color;
+      ctx.ellipse(p.x + p.tilt, p.y, p.r, p.r / 2, p.tiltAngle, 0, Math.PI * 2);
+      ctx.fill();
+      p.y += p.d;
+      p.tiltAngle += p.tiltSpeed;
+      p.tilt = Math.sin(p.tiltAngle) * 15;
+      if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+    }
+    frame++;
+    if (frame < 180) requestAnimationFrame(draw);
+    else canvas.style.display = 'none';
+  }
+  draw();
+}
+
 const params     = new URLSearchParams(location.search);
 const exerciseId = params.get('id');
 const profileId  = params.get('pid') || API.getActiveProfile()?.id;
@@ -110,6 +197,7 @@ function handleMCAnswer(selectedIdx, correctIdx, opts) {
     else if (i === selectedIdx && !isCorrect) btn.classList.add('wrong');
   });
 
+  isCorrect ? soundCorrect() : soundWrong();
   showFeedback(isCorrect, opts[correctIdx]);
 }
 
@@ -133,16 +221,20 @@ function handleTextAnswer(value, correctAnswer) {
   if (input)  { input.disabled = true; input.style.borderColor = isCorrect ? 'var(--success)' : 'var(--danger)'; }
   if (submit) submit.disabled = true;
 
+  isCorrect ? soundCorrect() : soundWrong();
   showFeedback(isCorrect, correctAnswer);
 }
 
 function showFeedback(isCorrect, correctAnswer) {
   const fb = document.getElementById('feedback');
-  fb.className = `feedback ${isCorrect ? 'correct' : 'wrong'}`;
+  fb.className = `feedback ${isCorrect ? 'correct' : 'wrong'} feedback-pop`;
   fb.textContent = isCorrect
     ? '✓ Rätt! Bra jobbat!'
     : `✗ Fel. Rätt svar: ${correctAnswer}`;
   fb.classList.remove('hidden');
+  // Återstarta animation
+  void fb.offsetWidth;
+  fb.classList.add('feedback-pop');
 
   const next = document.getElementById('btn-next');
   next.classList.remove('hidden');
@@ -162,7 +254,7 @@ async function finishExercise() {
   const pct = Math.round((score / max) * 100);
   let icon, heading, msg;
 
-  if (pct === 100)     { icon = '🏆'; heading = 'Perfekt!';       msg = 'Fantastiskt bra jobbat! Fullpoäng!'; }
+  if (pct === 100)     { icon = '🏆'; heading = 'Perfekt!';       msg = 'Fantastiskt bra jobbat! Fullpoäng!'; setTimeout(launchConfetti, 200); setTimeout(soundLevelUp, 100); }
   else if (pct >= 80)  { icon = '⭐'; heading = 'Jättefint!';     msg = 'Nästan perfekt – du är på rätt väg!'; }
   else if (pct >= 50)  { icon = '👍'; heading = 'Bra jobbat!';    msg = 'Mer än hälften rätt – fortsätt öva!'; }
   else                 { icon = '💪'; heading = 'Ge inte upp!';   msg = 'Försök igen – du lär dig för varje gång!'; }
@@ -195,6 +287,7 @@ async function finishExercise() {
       badgesList.innerHTML = result.new_badges.map(b =>
         `<div class="new-badge-row">${b.icon} <strong>${b.name}</strong> — ${b.description}</div>`
       ).join('');
+      setTimeout(soundBadge, 400);
     }
   } catch (e) {
     document.getElementById('result-xp').textContent = '+0 XP';

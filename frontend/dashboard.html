@@ -85,6 +85,30 @@
       <a href="history.html#badges" id="badges-link" class="btn btn-sm btn-ghost full-width" style="margin-top:8px">Se alla badges</a>
     </div>
 
+    <!-- Dagens mål -->
+    <div class="sidebar-card">
+      <h3>Dagens mål</h3>
+      <div id="daily-goal-widget">
+        <div class="goal-label">
+          <span id="goal-done">0 av 3</span>
+          <span id="goal-xp-bonus">+50 bonus-XP</span>
+        </div>
+        <div class="goal-bar-bg">
+          <div class="goal-bar-fill" id="goal-bar" style="width:0%"></div>
+        </div>
+        <div id="goal-status" class="muted" style="font-size:0.82rem;margin-top:4px">Gör 3 övningar idag för bonus-XP!</div>
+      </div>
+    </div>
+
+    <!-- Repetition påminnelse -->
+    <div class="sidebar-card" id="sr-reminder" style="display:none">
+      <h3>Repetitionsdags!</h3>
+      <div id="sr-due-text" class="muted" style="font-size:0.85rem;margin-bottom:10px"></div>
+      <a href="exercises.html" id="sr-link" class="btn btn-sm btn-outline full-width" style="text-align:center;justify-content:center">
+        Repetera nu →
+      </a>
+    </div>
+
     <!-- Snabbval: alla övningar -->
     <a href="exercises.html" id="exercises-link" class="btn btn-primary btn-lg full-width" style="text-align:center; justify-content:center">
       Öva nu! →

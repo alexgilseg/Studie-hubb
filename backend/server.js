@@ -12,11 +12,12 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // API-routes
-app.use('/api/profiles',      require('./routes/profiles'));
-app.use('/api/exercises',     require('./routes/exercises'));
-app.use('/api/sessions',      require('./routes/sessions'));
-app.use('/api/gamification',  require('./routes/gamification'));
-app.use('/api/exams',         require('./routes/exams'));
+app.use('/api/profiles',           require('./routes/profiles'));
+app.use('/api/exercises',          require('./routes/exercises'));
+app.use('/api/sessions',           require('./routes/sessions'));
+app.use('/api/gamification',       require('./routes/gamification'));
+app.use('/api/exams',              require('./routes/exams'));
+app.use('/api/spaced-repetition',  require('./routes/spaced-repetition'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '2.0.0' }));

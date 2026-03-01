@@ -10,17 +10,29 @@ if (!profileId) location.href = 'index.html';
 
 document.getElementById('back-to-dash').href = `dashboard.html?pid=${profileId}`;
 
-let activeSubject   = initSubject;
+let activeSubject    = initSubject;
 let activeDifficulty = '';
-let allExercises    = [];
+let allExercises     = [];
+let dueExerciseIds   = new Set(); // övningar med repetitionsfrågor
+
+const initMode = params.get('mode') || '';
 
 async function init() {
   buildSubjectChips();
-  await loadExercises();
+  await Promise.all([loadExercises(), loadDueExercises()]);
   document.getElementById('difficulty-filter').addEventListener('change', e => {
     activeDifficulty = e.target.value;
     renderExercises();
   });
+}
+
+async function loadDueExercises() {
+  try {
+    const data = await fetch(`http://localhost:3000/api/spaced-repetition/due?profile_id=${profileId}&limit=100`).then(r => r.json());
+    if (data.exercises?.length) {
+      dueExerciseIds = new Set(data.exercises.map(e => e.id));
+    }
+  } catch (_) {}
 }
 
 function buildSubjectChips() {
@@ -64,6 +76,7 @@ function renderExercises() {
   let list = allExercises.filter(e => {
     if (activeSubject && e.subject !== activeSubject) return false;
     if (activeDifficulty && e.difficulty !== parseInt(activeDifficulty)) return false;
+    if (initMode === 'repetition' && !dueExerciseIds.has(e.id)) return false;
     return true;
   });
 
@@ -80,11 +93,15 @@ function renderExercises() {
       : null;
     const scoreCls = last ? API.scoreClass(last.score, last.max_score) : '';
     const stars = '⭐'.repeat(e.difficulty);
+    const isDue = dueExerciseIds.has(e.id);
 
     return `
       <a class="exercise-card" href="exercise.html?id=${e.id}&pid=${profileId}"
          style="--card-color:${subj.color}">
-        <div class="card-subject-badge">${subj.icon} ${subj.label}</div>
+        <div class="card-subject-badge">
+          ${subj.icon} ${subj.label}
+          ${isDue ? '<span class="sr-due-indicator">🔁 Repetera</span>' : ''}
+        </div>
         <div class="card-title">${e.title}</div>
         ${e.description ? `<div class="card-description">${e.description}</div>` : ''}
         <div class="card-meta">

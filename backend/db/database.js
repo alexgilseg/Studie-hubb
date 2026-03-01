@@ -134,6 +134,7 @@ function migrate() {
   `);
 
   seedBadges();
+  // Content seed is called after module export is set up (see bottom of file)
 }
 
 function seedBadges() {
@@ -171,3 +172,7 @@ function seedBadges() {
 migrate();
 
 module.exports = db;
+
+// Seed starter content after export is defined (avoids circular require issues)
+const { seedContent } = require('./seed-content');
+seedContent();

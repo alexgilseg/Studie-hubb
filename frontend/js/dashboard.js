@@ -22,6 +22,8 @@ async function init() {
     renderRecentSessions(data.recentSessions);
     renderBadges(data.badges);
     loadExams();
+    loadDailyGoal();
+    loadSpacedRepetitionReminder();
   } catch (e) {
     showToast('Kunde inte ladda profil: ' + e.message, 'error');
   }
@@ -128,6 +130,51 @@ function renderBadges(badges = []) {
       </div>
     </div>
   `).join('');
+}
+
+async function loadDailyGoal() {
+  const DAILY_GOAL = 3; // övningar per dag
+  const BONUS_XP   = 50;
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const r = await API.sessions.list({ profile_id: profileId, limit: 20 });
+    const todaySessions = (r.sessions || []).filter(s =>
+      s.completed_at && s.completed_at.slice(0, 10) === today
+    );
+    const done = todaySessions.length;
+    const pct  = Math.min(100, Math.round((done / DAILY_GOAL) * 100));
+
+    document.getElementById('goal-done').textContent = `${done} av ${DAILY_GOAL} övningar`;
+    document.getElementById('goal-xp-bonus').textContent = `+${BONUS_XP} bonus-XP`;
+    document.getElementById('goal-bar').style.width = `${pct}%`;
+
+    const statusEl = document.getElementById('goal-status');
+    if (done >= DAILY_GOAL) {
+      statusEl.textContent = '';
+      const complete = document.createElement('div');
+      complete.className = 'goal-complete';
+      complete.textContent = '🎉 Dagens mål uppnått! Bra jobbat!';
+      statusEl.parentNode.insertBefore(complete, statusEl);
+      statusEl.remove();
+    } else {
+      const left = DAILY_GOAL - done;
+      statusEl.textContent = `${left} övning${left !== 1 ? 'ar' : ''} kvar för dagens bonus!`;
+    }
+  } catch (_) {}
+}
+
+async function loadSpacedRepetitionReminder() {
+  try {
+    const data = await fetch(`http://localhost:3000/api/spaced-repetition/due?profile_id=${profileId}&limit=50`).then(r => r.json());
+    if (data.due_count > 0) {
+      const card = document.getElementById('sr-reminder');
+      card.style.display = 'block';
+      document.getElementById('sr-due-text').textContent =
+        `Du har ${data.due_count} frågor som är redo för repetition. Repetera dem nu för att inte glömma!`;
+      const link = document.getElementById('sr-link');
+      if (link) link.href = `exercises.html?pid=${profileId}&mode=repetition`;
+    }
+  } catch (_) {}
 }
 
 async function loadExams() {

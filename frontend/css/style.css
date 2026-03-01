@@ -1077,6 +1077,94 @@ body {
 }
 
 /* ================================================
+   ANIMATIONS
+   ================================================ */
+@keyframes feedbackPop {
+  0%   { transform: scale(0.88); opacity: 0; }
+  60%  { transform: scale(1.04); }
+  100% { transform: scale(1);    opacity: 1; }
+}
+.feedback-pop { animation: feedbackPop 0.28s ease forwards; }
+
+@keyframes correctPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+  70%  { box-shadow: 0 0 0 14px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+.mc-option.correct { animation: correctPulse 0.5s ease; }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-6px); }
+  40%       { transform: translateX(6px); }
+  60%       { transform: translateX(-4px); }
+  80%       { transform: translateX(4px); }
+}
+.mc-option.wrong { animation: shake 0.35s ease; }
+
+@keyframes xpPop {
+  0%   { transform: scale(0.8); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.result-xp-earned { animation: xpPop 0.4s 0.3s ease both; }
+
+/* Due badge on exercise cards */
+.due-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+/* Daily goals widget */
+.goal-bar-wrap { margin-top: 10px; }
+.goal-bar-bg {
+  height: 12px;
+  background: var(--bg);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+.goal-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #8B5CF6);
+  border-radius: 999px;
+  transition: width 0.6s ease;
+}
+.goal-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.goal-complete {
+  background: #D1FAE5;
+  color: #065F46;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Spaced repetition indicator in exercise list */
+.sr-due-indicator {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #92400E;
+  background: #FEF3C7;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+/* ================================================
    RESPONSIVE
    ================================================ */
 @media (max-width: 900px) {
