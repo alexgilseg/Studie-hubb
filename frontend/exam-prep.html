@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Provberedskap</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <h1>📝 Provberedskap</h1>
+    <div class="header-actions">
+      <a href="dashboard.html" id="back-link" class="header-btn">← Dashboard</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <div id="exams-container">
+    <div class="empty-state" id="loading-state">
+      <span class="empty-icon">⏳</span>
+      <p>Laddar prov...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Provdetaljer -->
+<div class="overlay hidden" id="exam-detail-overlay">
+  <div class="editor-modal" style="max-width:600px">
+    <div class="editor-header">
+      <h2 id="exam-detail-title">Prov</h2>
+      <button class="close-btn" id="close-exam-detail">✕</button>
+    </div>
+    <div class="editor-body">
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:8px">
+        <div class="readiness-circle green" id="detail-readiness-circle">
+          <span id="detail-readiness-pct">0%</span>
+          <span id="detail-readiness-label">Redo</span>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:1.1rem" id="detail-exam-date"></div>
+          <div class="muted" id="detail-days-until"></div>
+        </div>
+      </div>
+      <div class="section-title">Kopplade övningar</div>
+      <div id="exam-detail-exercises" class="exercises-grid"></div>
+    </div>
+    <div class="editor-footer">
+      <button class="close-btn btn btn-ghost" id="close-exam-detail-btn">Stäng</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/exam-prep.js"></script>
+</body>
+</html>

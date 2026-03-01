@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <h1>🎓 Studie-hubb</h1>
+    <div class="header-actions">
+      <a href="admin.html" class="header-btn">Föräldrapanel</a>
+    </div>
+  </div>
+</header>
+
+<div class="home-hero">
+  <h1>Vem studerar idag?</h1>
+  <p>Välj din profil för att fortsätta</p>
+</div>
+
+<div class="profile-grid" id="profile-grid">
+  <div class="empty-state" id="loading-state">
+    <span class="empty-icon">⏳</span>
+    <p>Laddar profiler...</p>
+  </div>
+</div>
+
+<!-- Modal: Skapa profil -->
+<div class="overlay hidden" id="create-profile-overlay">
+  <div class="editor-modal" style="max-width:440px">
+    <div class="editor-header">
+      <h2>Ny profil</h2>
+      <button class="close-btn" id="close-create-profile">✕</button>
+    </div>
+    <div class="editor-body">
+      <div class="field-group">
+        <label>Namn</label>
+        <input class="input-field" id="new-profile-name" type="text" placeholder="T.ex. Juno">
+      </div>
+      <div class="field-group">
+        <label>Födelsedatum</label>
+        <input class="input-field" id="new-profile-birthdate" type="date">
+      </div>
+      <div class="field-group">
+        <label>Avatar</label>
+        <div id="avatar-picker" style="display:flex;gap:10px;flex-wrap:wrap;padding-top:4px"></div>
+        <input type="hidden" id="new-profile-avatar" value="1">
+      </div>
+    </div>
+    <div class="editor-footer">
+      <button class="btn btn-ghost" id="cancel-create-profile">Avbryt</button>
+      <button class="btn btn-primary" id="save-create-profile">Skapa profil</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

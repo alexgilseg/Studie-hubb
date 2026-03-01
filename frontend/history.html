@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studie-hubb — Historik</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <h1 id="page-title">📊 Historik</h1>
+    <div class="header-actions">
+      <a href="dashboard.html" id="back-link" class="header-btn">← Dashboard</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <div class="history-tabs">
+    <button class="history-tab active" data-tab="sessions">Sessioner</button>
+    <button class="history-tab" data-tab="subjects">Per ämne</button>
+    <button class="history-tab" data-tab="badges">Badges</button>
+  </div>
+
+  <!-- SESSIONER -->
+  <div id="tab-sessions">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:18px">
+      <select class="input-field select-sm" id="subject-filter">
+        <option value="">Alla ämnen</option>
+      </select>
+      <span id="sessions-count" class="muted"></span>
+    </div>
+    <div class="sessions-list" id="sessions-list"></div>
+    <button class="btn btn-ghost full-width" id="load-more" style="margin-top:16px">Ladda fler</button>
+  </div>
+
+  <!-- PER ÄMNE -->
+  <div id="tab-subjects" class="hidden">
+    <div id="subject-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px"></div>
+  </div>
+
+  <!-- BADGES -->
+  <div id="tab-badges" class="hidden">
+    <p class="muted" style="margin-bottom:16px" id="badges-summary"></p>
+    <div class="badges-grid" id="badges-grid"></div>
+  </div>
+</div>
+
+<div class="toast-container" id="toast-container"></div>
+
+<script src="js/api.js"></script>
+<script src="js/history.js"></script>
+</body>
+</html>
